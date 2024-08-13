@@ -248,28 +248,28 @@ default via 10.10.0.1 dev eth0
 
 ws11
 
-![screenshot of task5 - ws11](./linux2/5_task_14.png)
+![screenshot of task5 - ws11](./img/5_task_14.png)
 
 ws21
 
-![screenshot of task5 - ws21](./linux2/5_task_15.png)
+![screenshot of task5 - ws21](./img/5_task_15.png)
 
 ws22
 
-![screenshot of task5 - ws22](./linux2/5_task_16.png)
+![screenshot of task5 - ws22](./img/5_task_16.png)
 
 
 ##### Вызови `ip r` и покажи, что добавился маршрут в таблицу маршрутизации.
 
-![screenshot of task5 - ws11](./linux2/5_task_17.png)
-![screenshot of task5 - ws22](./linux2/5_task_19.png)
-![screenshot of task5 - ws12](./linux2/5_task_18.png)
+![screenshot of task5 - ws11](./img/5_task_17.png)
+![screenshot of task5 - ws22](./img/5_task_19.png)
+![screenshot of task5 - ws12](./img/5_task_18.png)
 
 ##### Пропингуй с ws11 роутер r2 и покажи на r2, что пинг доходит. Для этого используй команду:
 `tcpdump -tn -i eth0`
 
-![screenshot of task5 - ws11](./linux2/5_task_20.png)
-![screenshot of task5 - к2](./linux2/5_task_21.png)
+![screenshot of task5 - ws11](./img/5_task_20.png)
+![screenshot of task5 - к2](./img/5_task_21.png)
 
 #### 5.4. Добавление статических маршрутов
 ##### Добавь в роутеры r1 и r2 статические маршруты в файле конфигураций. Пример для r1 маршрута в сетку 10.20.0.0/26:
@@ -278,16 +278,16 @@ ws22
 - to: 10.20.0.0
   via: 10.100.0.12
 ```
-![screenshot of task5 - r1 and r2](./linux2/5_task_22.png)
+![screenshot of task5 - r1 and r2](./img/5_task_22.png)
 
 ##### Вызови `ip r` и покажи таблицы с маршрутами на обоих роутерах.
 
-![screenshot of task5 - r1 and r2](./linux2/5_task_23-24.png)
+![screenshot of task5 - r1 and r2](./img/5_task_23-24.png)
 
 ##### Запусти команды на ws11:
 `ip r list 10.10.0.0/[маска сети]` и `ip r list 0.0.0.0/0`
 
-![screenshot of task5 - ws11](./linux2/5_task_25.png)
+![screenshot of task5 - ws11](./img/5_task_25.png)
 
 - Отправка в сеть пакетов с машины ws11 будет через enp0s3 напрямую получателю. При отправке пакетов вне сети 10.10.0.0/18, пакеты будут отправляться на интерфейс шлюза.
 
@@ -296,7 +296,7 @@ ws22
 `tcpdump -tnv -i eth0`
 ##### При помощи утилиты **traceroute** построй список маршрутизаторов на пути от ws11 до ws21.
 
-![screenshot of task5 - ws11](./linux2/5_task_26.png)
+![screenshot of task5 - ws11](./img/5_task_26.png)
 
  Для определения промежуточных маршрутизаторов traceroute отправляет целевому узлу серию ICMP-пакетов (по умолчанию 3 пакета), с каждым шагом увеличивая значение поля TTL («время жизни») на 1. Это поле обычно указывает максимальное количество маршрутизаторов, которое может быть пройдено пакетом. Первая серия пакетов отправляется с TTL, равным 1, и поэтому первый же маршрутизатор возвращает обратно ICMP-сообщение «time exceeded in transit», указывающее на невозможность доставки данных. Traceroute фиксирует адрес маршрутизатора, а также время между отправкой пакета и получением ответа (эти сведения выводятся на монитор компьютера). Затем traceroute повторяет отправку серии пакетов, но уже с TTL, равным 2, что заставляет первый маршрутизатор уменьшить TTL пакетов на единицу и направить их ко второму маршрутизатору. Второй маршрутизатор, получив пакеты с TTL=1, так же возвращает «time exceeded in transit».
         - Процесс повторяется до тех пор, пока пакет не достигнет целевого узла. При получении ответа от этого узла процесс трассировки считается завершённым.
@@ -308,7 +308,7 @@ ws22
 ##### Пропингуй с ws11 несуществующий IP (например, *10.30.0.111*) с помощью команды:
 `ping -c 1 10.30.0.111`
 
-![screenshot of task5 - ws11](./linux2/5_task_27.png)
+![screenshot of task5 - ws11](./img/5_task_27.png)
 
 ## Part 6. Динамическая настройка IP с помощью **DHCP**
 ##### Для r2 настрой в файле */etc/dhcp/dhcpd.conf* конфигурацию службы **DHCP**:
@@ -325,32 +325,32 @@ subnet 10.20.0.0 netmask 255.255.255.192
 ```
 ##### 2) В файле *resolv.conf* пропиши `nameserver 8.8.8.8`.
 
-![screenshot of task5 - ws11](./linux2/6_task_1.png)
-![screenshot of task5 - ws11](./linux2/6_task_2.png)
+![screenshot of task5 - ws11](./img/6_task_1.png)
+![screenshot of task5 - ws11](./img/6_task_2.png)
 
 ##### Перезагрузи службу **DHCP** командой `systemctl restart isc-dhcp-server`. Машину ws21 перезагрузи при помощи `reboot` и через `ip a` покажи, что она получила адрес. Также пропингуй ws22 с ws21.
 
-![screenshot of task5 - ws11](./linux2/6_task_3.png)
-![screenshot of task5 - ws11](./linux2/6_task_4.png)
-![screenshot of task5 - ws11](./linux2/6_task_6.png)
-![screenshot of task5 - ws11](./linux2/6_task_7.png)
+![screenshot of task5 - ws11](./img/6_task_3.png)
+![screenshot of task5 - ws11](./img/6_task_4.png)
+![screenshot of task5 - ws11](./img/6_task_6.png)
+![screenshot of task5 - ws11](./img/6_task_7.png)
 
 ##### Укажи MAC адрес у ws11, для этого в *etc/netplan/00-installer-config.yaml* надо добавить строки: `macaddress: 10:10:10:10:10:BA`, `dhcp4: true`.
 
-![screenshot of task5 - ws11](./linux2/6_task_8.png)
+![screenshot of task5 - ws11](./img/6_task_8.png)
 
 ##### Для r1 настрой аналогично r2, но сделай выдачу адресов с жесткой привязкой к MAC-адресу (ws11). Проведи аналогичные тесты.
 
-![screenshot of task5 - ws11](./linux2/6_task_9.png)
-![screenshot of task5 - ws11](./linux2/6_task_10.png)
-![screenshot of task5 - ws11](./linux2/6_task_11.png)
-![screenshot of task5 - ws11](./linux2/6_task_12.png)
-![screenshot of task5 - ws11](./linux2/6_task_13.png)
+![screenshot of task5 - ws11](./img/6_task_9.png)
+![screenshot of task5 - ws11](./img/6_task_10.png)
+![screenshot of task5 - ws11](./img/6_task_11.png)
+![screenshot of task5 - ws11](./img/6_task_12.png)
+![screenshot of task5 - ws11](./img/6_task_13.png)
 
 ##### Запроси с ws21 обновление ip адреса.
 
-![screenshot of task5 - ws11](./linux2/6_task_14.png)
-![screenshot of task5 - ws11](./linux2/6_task_15.png)
+![screenshot of task5 - ws11](./img/6_task_14.png)
+![screenshot of task5 - ws11](./img/6_task_15.png)
 
 - Использованные опции: Список шлюзов IP адресов по умолчанию, имя DNS сервера по умолчанию, имя хоста клиента, маска подсети, шлюз по умолчанию. 
 
@@ -368,17 +368,17 @@ subnet 10.20.0.0 netmask 255.255.255.192
 *При запуске файла с этими правилами, ws22 не должна "пинговаться" с r1*
 - В отчёт поместить скрины с вызовом и выводом использованной команды.
 
-**== Выполнение ==**
+
 * Создаем на r2 файл /etc/firewall.sh, имитирующий фаерволл
 * Добавляем в фаервол следующие правила:<br>
 `iptables -F`<br>
 `iptables -F -t nat`<br>
 `iptables --policy FORWARD DROP`<br>
-![r2](pictures/89.png)<br>*r2*<br>
+![r2](img/89.png)<br>*r2*<br>
 * Запускаем файл командами `sudo chmod +x /etc/firewall.sh` и `sudo bash /etc/firewall.sh`
-![r2](pictures/90.png)<br>*r2*<br>
+![r2](img/90.png)<br>*r2*<br>
 * Проверяем соединение между ws22 и r1 командой `ping`, ws22 не должна "пинговаться" с r1
-![r1](pictures/91.png)<br>*r1*<br>
+![r1](img/91.png)<br>*r1*<br>
 <br>
 
 **== Задание 7.4 ==**
@@ -390,15 +390,15 @@ subnet 10.20.0.0 netmask 255.255.255.192
 *При запуске файла с этими правилами, ws22 должна "пинговаться" с r1*
 - В отчёт поместить скрины с вызовом и выводом использованной команды.
 
-**== Выполнение ==**
+
 * Добавляем в фаервол следующие правила:<br>
 `iptables -A INPUT -p icmp --icmp-type 8 -j ACCEPT`<br>
 `iptables -A OUTPUT -p icmp --icmp-type 8 -j ACCEPT`<br>
-![r2](pictures/92.png)<br>*r2*<br>
+![r2](img/92.png)<br>*r2*<br>
 * Запускаем файл командами `sudo chmod +x /etc/firewall.sh` и `sudo bash /etc/firewall.sh`
-![r2](pictures/90.png)<br>*r2*<br>
+![r2](img/90.png)<br>*r2*<br>
 * Проверяем соединение между ws22 и r1 командой `ping`, ws22 должна "пинговаться" с r1
-![r1](pictures/93.png)<br>*r1*<br>
+![r1](img/93.png)<br>*r1*<br>
 
 <br>
 
@@ -416,18 +416,16 @@ subnet 10.20.0.0 netmask 255.255.255.192
 - В отчёт поместить скрины с вызовом и выводом использованных команд.
 ##### Сохранить дампы образов виртуальных машин
 
-**== Выполнение ==**
-
 * Добавляем в фаервол следующие правила:<br>
-![r2](pictures/94.png)<br>*r2*<br>
+![r2](img/94.png)<br>*r2*<br>
 * Отключаем сетевой интерфейс **NAT**
 * Запускаем файл командами `sudo chmod +x /etc/firewall.sh` и `sudo bash /etc/firewall.sh`
-![r2](pictures/90.png)<br>*r2*<br>
+![r2](img/90.png)<br>*r2*<br>
 * Проверить соединение по TCP для **SNAT**, для этого с ws22 подключаемся к серверу Apache на r1 командой:
 `telnet 10.10.0.1 80`
-![ws22](pictures/95.png)<br>*ws22*<br>
+![ws22](img/95.png)<br>*ws22*<br>
 * Проверяем соединение по TCP для **DNAT**, для этого с r1 подключаемся к серверу Apache на ws22 командой `telnet 10.20.0.20 80`
-![r1](pictures/96.png)<br>*r1*<br>
+![r1](img/96.png)<br>*r1*<br>
 <br>
 
 ## Part 8. Дополнительно. Знакомство с **SSH Tunnels**
@@ -443,17 +441,15 @@ subnet 10.20.0.0 netmask 255.255.255.192
 - В отчёте описать команды, необходимые для выполнения этих четырёх пунктов, а также приложить скриншоты с их вызовом и выводом.
 ##### Сохранить дампы образов виртуальных машин
 
-**== Выполнение ==**
-
 * Запускаем на r2 фаервол с правилами из Части 7:<br>
-![r2](pictures/94.png)<br>*r2*<br>
+![r2](img/94.png)<br>*r2*<br>
 * Запускаем файл командами `sudo chmod +x /etc/firewall.sh` и `sudo bash /etc/firewall.sh`
-![r2](pictures/90.png)<br>*r2*<br>
+![r2](img/90.png)<br>*r2*<br>
 * Запускаем веб-сервер **Apache** на ws22 только на localhost (то есть в файле */etc/apache2/ports.conf* меняем строку `Listen 80` на `Listen localhost:80`
-![ws22](pictures/97.png)<br>*ws22*<br>
+![ws22](img/97.png)<br>*ws22*<br>
 * Воспользуемся *Local TCP forwarding* с ws21 до ws22, чтобы получить доступ к веб-серверу на ws22 с ws21
-![ws21](pictures/98.png)<br>*ws21*<br>
+![ws21](img/98.png)<br>*ws21*<br>
 * Воспользуемся *Remote TCP forwarding* c ws11 до ws22, чтобы получить доступ к веб-серверу на ws22 с ws11
-![ws11](pictures/100.png)<br>*ws11*<br>
+![ws11](img/100.png)<br>*ws11*<br>
 
 <br>
